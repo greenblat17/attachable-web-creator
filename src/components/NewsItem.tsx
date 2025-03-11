@@ -10,7 +10,7 @@ interface NewsItemProps {
 export const NewsItem = ({ title, date, author }: NewsItemProps) => {
   return (
     <motion.div 
-      className="border-b border-gray-100 py-6"
+      className="border-b border-gray-100 py-6 last:border-0"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}

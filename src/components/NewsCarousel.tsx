@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface NewsItemProps {
   title: string;
@@ -9,9 +10,14 @@ interface NewsItemProps {
 
 const NewsItem = ({ title, id }: NewsItemProps) => {
   return (
-    <div className="news-card animate-scale-in" style={{ animationDelay: `${id * 50}ms` }}>
+    <motion.div 
+      className="news-card w-64 h-16 flex-shrink-0"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: id * 0.1, duration: 0.3 }}
+    >
       <span>{title}</span>
-    </div>
+    </motion.div>
   );
 };
 
@@ -26,7 +32,7 @@ export const NewsCarousel = () => {
   ];
   
   const totalItems = newsItems.length;
-  const itemsToShow = 3;
+  const itemsToShow = 1;
   const maxIndex = totalItems - itemsToShow;
 
   const nextSlide = useCallback(() => {
@@ -49,32 +55,44 @@ export const NewsCarousel = () => {
     return () => clearInterval(interval);
   }, [nextSlide]);
 
-  const visibleItems = newsItems.slice(activeIndex, activeIndex + itemsToShow);
+  const currentItem = newsItems[activeIndex];
+  const prevItem = activeIndex > 0 ? newsItems[activeIndex - 1] : newsItems[maxIndex];
+  const nextItem = activeIndex < maxIndex ? newsItems[activeIndex + 1] : newsItems[0];
 
   return (
-    <div className="w-full pt-6">
-      <div className="relative">
-        <div className="flex justify-between items-center gap-6">
-          {visibleItems.map((item) => (
-            <NewsItem key={item.id} title={item.title} id={item.id} />
-          ))}
+    <div className="w-full py-6">
+      <div className="relative max-w-5xl mx-auto">
+        <div className="flex justify-center items-center gap-8">
+          <div className="flex items-center">
+            <button 
+              className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
+              onClick={prevSlide}
+              aria-label="Previous slide"
+            >
+              <ArrowLeft className="w-5 h-5 text-gray-700" />
+            </button>
+            <div className="opacity-70 mx-4">
+              <NewsItem key={prevItem.id} title={prevItem.title} id={prevItem.id} />
+            </div>
+          </div>
+          
+          <div className="scale-110 z-10">
+            <NewsItem key={currentItem.id} title={currentItem.title} id={currentItem.id} />
+          </div>
+          
+          <div className="flex items-center">
+            <div className="opacity-70 mx-4">
+              <NewsItem key={nextItem.id} title={nextItem.title} id={nextItem.id} />
+            </div>
+            <button 
+              className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
+              onClick={nextSlide}
+              aria-label="Next slide"
+            >
+              <ArrowRight className="w-5 h-5 text-gray-700" />
+            </button>
+          </div>
         </div>
-        
-        <button 
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 bg-white rounded-full p-2 shadow-md"
-          onClick={prevSlide}
-          aria-label="Previous slide"
-        >
-          <ArrowLeft className="w-5 h-5 text-gray-700" />
-        </button>
-        
-        <button 
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 bg-white rounded-full p-2 shadow-md"
-          onClick={nextSlide}
-          aria-label="Next slide"
-        >
-          <ArrowRight className="w-5 h-5 text-gray-700" />
-        </button>
       </div>
     </div>
   );

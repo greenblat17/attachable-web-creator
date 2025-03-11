@@ -47,8 +47,11 @@ const Index = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
+            className="max-w-6xl mx-auto"
           >
-            <NewsCarousel />
+            <div className="flex justify-center w-full mb-8">
+              <NewsCarousel />
+            </div>
             
             <motion.h2 
               className="text-3xl font-medium mt-10 mb-6"
