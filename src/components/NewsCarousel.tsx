@@ -32,8 +32,7 @@ export const NewsCarousel = () => {
   ];
   
   const totalItems = newsItems.length;
-  const itemsToShow = 1;
-  const maxIndex = totalItems - itemsToShow;
+  const maxIndex = totalItems - 1;
 
   const nextSlide = useCallback(() => {
     setActiveIndex(prevIndex => 
@@ -55,9 +54,9 @@ export const NewsCarousel = () => {
     return () => clearInterval(interval);
   }, [nextSlide]);
 
-  const currentItem = newsItems[activeIndex];
-  const prevItem = activeIndex > 0 ? newsItems[activeIndex - 1] : newsItems[maxIndex];
-  const nextItem = activeIndex < maxIndex ? newsItems[activeIndex + 1] : newsItems[0];
+  const getCurrentItem = () => newsItems[activeIndex];
+  const getPrevItem = () => newsItems[activeIndex === 0 ? maxIndex : activeIndex - 1];
+  const getNextItem = () => newsItems[activeIndex === maxIndex ? 0 : activeIndex + 1];
 
   return (
     <div className="w-full py-6">
@@ -72,17 +71,17 @@ export const NewsCarousel = () => {
               <ArrowLeft className="w-5 h-5 text-gray-700" />
             </button>
             <div className="opacity-70 mx-4">
-              <NewsItem key={prevItem.id} title={prevItem.title} id={prevItem.id} />
+              <NewsItem key={`prev-${getPrevItem().id}`} title={getPrevItem().title} id={getPrevItem().id} />
             </div>
           </div>
           
           <div className="scale-110 z-10">
-            <NewsItem key={currentItem.id} title={currentItem.title} id={currentItem.id} />
+            <NewsItem key={`current-${getCurrentItem().id}`} title={getCurrentItem().title} id={getCurrentItem().id} />
           </div>
           
           <div className="flex items-center">
             <div className="opacity-70 mx-4">
-              <NewsItem key={nextItem.id} title={nextItem.title} id={nextItem.id} />
+              <NewsItem key={`next-${getNextItem().id}`} title={getNextItem().title} id={getNextItem().id} />
             </div>
             <button 
               className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
