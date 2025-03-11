@@ -40,11 +40,11 @@ export const NewsCarousel = () => {
     );
   }, [maxIndex]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setActiveIndex(prevIndex => 
       prevIndex <= 0 ? maxIndex : prevIndex - 1
     );
-  };
+  }, [maxIndex]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -54,43 +54,42 @@ export const NewsCarousel = () => {
     return () => clearInterval(interval);
   }, [nextSlide]);
 
-  const getCurrentItem = () => newsItems[activeIndex];
-  const getPrevItem = () => newsItems[activeIndex === 0 ? maxIndex : activeIndex - 1];
-  const getNextItem = () => newsItems[activeIndex === maxIndex ? 0 : activeIndex + 1];
+  // Get current, previous and next items directly when rendering
+  const currentItem = newsItems[activeIndex];
+  const prevItem = newsItems[activeIndex === 0 ? maxIndex : activeIndex - 1];
+  const nextItem = newsItems[activeIndex === maxIndex ? 0 : activeIndex + 1];
 
   return (
     <div className="w-full py-6">
       <div className="relative max-w-5xl mx-auto">
-        <div className="flex justify-center items-center gap-8">
-          <div className="flex items-center">
-            <button 
-              className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
-              onClick={prevSlide}
-              aria-label="Previous slide"
-            >
-              <ArrowLeft className="w-5 h-5 text-gray-700" />
-            </button>
-            <div className="opacity-70 mx-4">
-              <NewsItem key={`prev-${getPrevItem().id}`} title={getPrevItem().title} id={getPrevItem().id} />
-            </div>
+        <div className="flex justify-center items-center gap-4 md:gap-8">
+          <button 
+            className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
+            onClick={prevSlide}
+            aria-label="Previous slide"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-700" />
+          </button>
+          
+          <div className="opacity-70 hidden md:block">
+            <NewsItem title={prevItem.title} id={prevItem.id} />
           </div>
           
           <div className="scale-110 z-10">
-            <NewsItem key={`current-${getCurrentItem().id}`} title={getCurrentItem().title} id={getCurrentItem().id} />
+            <NewsItem title={currentItem.title} id={currentItem.id} />
           </div>
           
-          <div className="flex items-center">
-            <div className="opacity-70 mx-4">
-              <NewsItem key={`next-${getNextItem().id}`} title={getNextItem().title} id={getNextItem().id} />
-            </div>
-            <button 
-              className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
-              onClick={nextSlide}
-              aria-label="Next slide"
-            >
-              <ArrowRight className="w-5 h-5 text-gray-700" />
-            </button>
+          <div className="opacity-70 hidden md:block">
+            <NewsItem title={nextItem.title} id={nextItem.id} />
           </div>
+          
+          <button 
+            className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
+            onClick={nextSlide}
+            aria-label="Next slide"
+          >
+            <ArrowRight className="w-5 h-5 text-gray-700" />
+          </button>
         </div>
       </div>
     </div>
