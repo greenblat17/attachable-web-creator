@@ -11,12 +11,12 @@ interface NewsItemProps {
 const NewsItem = ({ title, id }: NewsItemProps) => {
   return (
     <motion.div 
-      className="news-card w-64 h-16 flex-shrink-0"
+      className="news-card w-64 h-16 flex-shrink-0 bg-white p-4 rounded-lg shadow-sm border border-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: id * 0.1, duration: 0.3 }}
     >
-      <span>{title}</span>
+      <span className="text-sm font-medium line-clamp-2">{title}</span>
     </motion.div>
   );
 };
@@ -24,11 +24,11 @@ const NewsItem = ({ title, id }: NewsItemProps) => {
 export const NewsCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const newsItems = [
-    { id: 1, title: "News 1" },
-    { id: 2, title: "News 2" },
-    { id: 3, title: "News 3" },
-    { id: 4, title: "News 4" },
-    { id: 5, title: "News 5" },
+    { id: 1, title: "Новый законопроект о налоговых льготах для малого бизнеса принят в первом чтении" },
+    { id: 2, title: "Запуск программы цифровой трансформации предприятий запланирован на апрель" },
+    { id: 3, title: "Результаты квартального экономического форума: ключевые решения и перспективы" },
+    { id: 4, title: "Внедрение новой системы электронного документооборота: первые итоги" },
+    { id: 5, title: "Открыт прием заявок на участие в программе поддержки инновационных проектов" },
   ];
   
   const totalItems = newsItems.length;
