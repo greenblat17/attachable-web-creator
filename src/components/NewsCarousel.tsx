@@ -11,7 +11,7 @@ interface NewsItemProps {
 const NewsItem = ({ title, id }: NewsItemProps) => {
   return (
     <motion.div 
-      className="news-card w-64 h-16 flex-shrink-0 bg-white p-4 rounded-lg shadow-sm border border-gray-100"
+      className="news-card"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: id * 0.1, duration: 0.3 }}
@@ -62,7 +62,7 @@ export const NewsCarousel = () => {
   return (
     <div className="w-full py-6">
       <div className="relative max-w-5xl mx-auto">
-        <div className="flex justify-center items-center gap-4 md:gap-8">
+        <div className="flex justify-center items-center gap-6">
           <button 
             className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
             onClick={prevSlide}
