@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { 
   Home, 
@@ -26,7 +26,15 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, active, to }) => {
 };
 
 export const Sidebar = () => {
-  const [activeItem, setActiveItem] = useState("news");
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  // Determine active item based on current path
+  const getIsActive = (path: string) => {
+    if (path === "/" && currentPath === "/") return true;
+    if (path !== "/" && currentPath.startsWith(path)) return true;
+    return false;
+  };
 
   return (
     <aside className="w-72 bg-white border-r border-gray-100 h-screen p-6">
@@ -36,33 +44,33 @@ export const Sidebar = () => {
       
       <nav className="space-y-2">
         <NavItem 
-          icon={<Home className="text-blue-500" />} 
+          icon={<Home className={getIsActive('/') ? "text-blue-500" : ""} />} 
           label="Новости" 
-          active={activeItem === "news"} 
+          active={getIsActive('/')} 
           to="/" 
         />
         <NavItem 
-          icon={<BarChart3 />} 
+          icon={<BarChart3 className={getIsActive('/reports') ? "text-blue-500" : ""} />} 
           label="Отчеты" 
-          active={activeItem === "reports"} 
+          active={getIsActive('/reports')} 
           to="/reports" 
         />
         <NavItem 
-          icon={<ShieldAlert />} 
+          icon={<ShieldAlert className={getIsActive('/requests') ? "text-blue-500" : ""} />} 
           label="Обращения" 
-          active={activeItem === "requests"} 
+          active={getIsActive('/requests')} 
           to="/requests" 
         />
         <NavItem 
-          icon={<FileText />} 
+          icon={<FileText className={getIsActive('/documents') ? "text-blue-500" : ""} />} 
           label="Документы" 
-          active={activeItem === "documents"} 
+          active={getIsActive('/documents')} 
           to="/documents" 
         />
         <NavItem 
-          icon={<HelpCircle />} 
+          icon={<HelpCircle className={getIsActive('/help') ? "text-blue-500" : ""} />} 
           label="Помощь" 
-          active={activeItem === "help"} 
+          active={getIsActive('/help')} 
           to="/help" 
         />
       </nav>
