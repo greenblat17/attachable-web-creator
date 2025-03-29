@@ -5,9 +5,11 @@ import { Header } from "../components/Header";
 import { NewsCarousel } from "../components/NewsCarousel";
 import { NewsItem } from "../components/NewsItem";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
   
   useEffect(() => {
     // Simulate loading
@@ -72,7 +74,7 @@ const Index = () => {
       <Sidebar />
       
       <main className="flex-1 flex flex-col overflow-hidden">
-        <Header userName="Журавлёв А.А." />
+        <Header userName={user?.name || ''} />
         
         <div className="flex-1 overflow-y-auto p-8">
           <motion.div 
