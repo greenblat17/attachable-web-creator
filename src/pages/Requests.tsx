@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Sidebar } from "../components/Sidebar";
 import { Header } from "../components/Header";
 import { motion } from "framer-motion";
-import { ShieldAlert, Search, Filter, ArrowUpDown, Eye, Clock } from "lucide-react";
+import { ShieldAlert, Search, Filter, ArrowUpDown, Eye, Clock, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerClose,
+} from "@/components/ui/drawer";
+import NewRequestForm from "../components/NewRequestForm";
 
 // Sample request data
 type RequestStatus = "новый" | "в работе" | "завершен" | "отклонен";
@@ -143,6 +153,7 @@ const RequestItem = ({ request }: { request: Request }) => {
 const Requests = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
   const filteredRequests = sampleRequests.filter(request => {
     const matchesSearch = request.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -151,6 +162,10 @@ const Requests = () => {
     
     return matchesSearch && matchesStatus;
   });
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -172,7 +187,11 @@ const Requests = () => {
                   Обращения
                 </h2>
               </div>
-              <Button variant="default">
+              <Button 
+                variant="default" 
+                onClick={() => setIsDrawerOpen(true)}
+              >
+                <Plus className="mr-1 w-4 h-4" />
                 Новое обращение
               </Button>
             </div>
@@ -225,6 +244,20 @@ const Requests = () => {
           </motion.div>
         </div>
       </main>
+
+      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+        <DrawerContent className="max-h-[90vh] overflow-y-auto">
+          <DrawerHeader>
+            <DrawerTitle className="text-center text-xl">Новое обращение</DrawerTitle>
+            <DrawerDescription className="text-center">
+              Заполните форму для создания нового обращения
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="px-4 pb-2">
+            <NewRequestForm onSuccess={handleDrawerClose} />
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };
