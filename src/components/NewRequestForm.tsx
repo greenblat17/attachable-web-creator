@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const formSchema = z.object({
   title: z.string().min(5, {
@@ -46,6 +47,7 @@ interface NewRequestFormProps {
 
 const NewRequestForm: React.FC<NewRequestFormProps> = ({ onSuccess }) => {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -92,54 +94,56 @@ const NewRequestForm: React.FC<NewRequestFormProps> = ({ onSuccess }) => {
           )}
         />
         
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Категория</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите категорию" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="Техническая поддержка">Техническая поддержка</SelectItem>
-                  <SelectItem value="Документооборот">Документооборот</SelectItem>
-                  <SelectItem value="Консультация">Консультация</SelectItem>
-                  <SelectItem value="Финансы">Финансы</SelectItem>
-                  <SelectItem value="Отчетность">Отчетность</SelectItem>
-                  <SelectItem value="Разработка">Разработка</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="priority"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Приоритет</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите приоритет" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="высокий">Высокий</SelectItem>
-                  <SelectItem value="средний">Средний</SelectItem>
-                  <SelectItem value="низкий">Низкий</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-4`}>
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Категория</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите категорию" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Техническая поддержка">Техническая поддержка</SelectItem>
+                    <SelectItem value="Документооборот">Документооборот</SelectItem>
+                    <SelectItem value="Консультация">Консультация</SelectItem>
+                    <SelectItem value="Финансы">Финансы</SelectItem>
+                    <SelectItem value="Отчетность">Отчетность</SelectItem>
+                    <SelectItem value="Разработка">Разработка</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="priority"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Приоритет</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите приоритет" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="высокий">Высокий</SelectItem>
+                    <SelectItem value="средний">Средний</SelectItem>
+                    <SelectItem value="низкий">Низкий</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         
         <FormField
           control={form.control}
@@ -160,10 +164,10 @@ const NewRequestForm: React.FC<NewRequestFormProps> = ({ onSuccess }) => {
         />
         
         <div className="flex justify-end space-x-2">
-          <Button variant="outline" type="button" onClick={onSuccess}>
+          <Button variant="outline" type="button" onClick={onSuccess} className="w-full sm:w-auto">
             Отмена
           </Button>
-          <Button type="submit">Отправить</Button>
+          <Button type="submit" className="w-full sm:w-auto">Отправить</Button>
         </div>
       </form>
     </Form>

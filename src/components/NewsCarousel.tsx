@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface NewsItemProps {
   title: string;
@@ -23,6 +24,8 @@ const NewsItem = ({ title, id }: NewsItemProps) => {
 
 export const NewsCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const isMobile = useIsMobile();
+  
   const newsItems = [
     { id: 1, title: "Новый законопроект о налоговых льготах для малого бизнеса принят в первом чтении" },
     { id: 2, title: "Запуск программы цифровой трансформации предприятий запланирован на апрель" },
@@ -62,33 +65,37 @@ export const NewsCarousel = () => {
   return (
     <div className="w-full py-6">
       <div className="relative max-w-5xl mx-auto">
-        <div className="flex justify-center items-center gap-6">
+        <div className="flex justify-center items-center gap-4 md:gap-6">
           <button 
             className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
             onClick={prevSlide}
             aria-label="Previous slide"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 text-gray-700" />
           </button>
           
-          <div className="opacity-70 hidden md:block">
-            <NewsItem title={prevItem.title} id={prevItem.id} />
-          </div>
+          {!isMobile && (
+            <div className="opacity-70 hidden md:block">
+              <NewsItem title={prevItem.title} id={prevItem.id} />
+            </div>
+          )}
           
           <div className="scale-110 z-10">
             <NewsItem title={currentItem.title} id={currentItem.id} />
           </div>
           
-          <div className="opacity-70 hidden md:block">
-            <NewsItem title={nextItem.title} id={nextItem.id} />
-          </div>
+          {!isMobile && (
+            <div className="opacity-70 hidden md:block">
+              <NewsItem title={nextItem.title} id={nextItem.id} />
+            </div>
+          )}
           
           <button 
             className="bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-50 transition-colors"
             onClick={nextSlide}
             aria-label="Next slide"
           >
-            <ArrowRight className="w-5 h-5 text-gray-700" />
+            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-gray-700" />
           </button>
         </div>
       </div>
